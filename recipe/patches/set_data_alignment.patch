@@ -1,0 +1,30 @@
+diff --git a/libhdf5/hdf5create.c b/libhdf5/hdf5create.c
+index 0475c525..f5e108d9 100644
+--- a/libhdf5/hdf5create.c
++++ b/libhdf5/hdf5create.c
+@@ -125,6 +125,10 @@ nc4_create_file(const char *path, int cmode, size_t initialsz,
+         BAIL(NC_EHDFERR);
+     if (H5Pset_fclose_degree(fapl_id, H5F_CLOSE_WEAK))
+         BAIL(NC_EHDFERR);
++    // if (H5Pset_alignment(fapl_id, alignment_threshold, alignment_interval) < 0) {
++    if (H5Pset_alignment(fapl_id, 15 * 4096, 4096) < 0) {
++        BAIL(NC_EHDFERR);
++    }
+
+ #ifdef USE_PARALLEL4
+     /* If this is a parallel file create, set up the file creation
+diff --git a/libhdf5/hdf5open.c b/libhdf5/hdf5open.c
+index f3ede3ed..bd787a6a 100644
+--- a/libhdf5/hdf5open.c
++++ b/libhdf5/hdf5open.c
+@@ -775,6 +775,10 @@ nc4_open_file(const char *path, int mode, void* parameters, int ncid)
+     if (H5Pset_fclose_degree(fapl_id, H5F_CLOSE_WEAK) < 0)
+         BAIL(NC_EHDFERR);
+
++    // if (H5Pset_alignment(fapl_id, alignment_threshold, alignment_interval) < 0) {
++    if (H5Pset_alignment(fapl_id, 15 * 4096, 4096) < 0) {
++        BAIL(NC_EHDFERR);
++    }
+ #ifdef USE_PARALLEL4
+     if (!(mode & (NC_INMEMORY | NC_DISKLESS)) && mpiinfo != NULL) {
+         /* If this is a parallel file create, set up the file creation

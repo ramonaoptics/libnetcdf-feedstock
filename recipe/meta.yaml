@@ -8,6 +8,9 @@
 {% set build = build + 100 %}
 {% endif %}
 
+# Set some very high build numbers for ramona optics
+{% set build = build + 500 %}
+
 package:
   name: libnetcdf
   version: {{ version }}
@@ -27,6 +30,7 @@ source:
     - patches/fix_cmake.patch  # [win]
     # Fix renaming file with multiple builds--will be in 4.8.2
     - patches/fix-rename.patch
+    - patches/set_data_alignment.patch
 
 build:
   number: {{ build }}
@@ -95,7 +99,6 @@ requirements:
 
 test:
   commands:
-    - test -f ${PREFIX}/lib/libnetcdf.a  # [not win]
     - test -f ${PREFIX}/lib/libnetcdf${SHLIB_EXT}  # [not win]
     - nc-config --all  # [not win]
 

@@ -55,30 +55,6 @@ if [[ ${target_platform} == "linux-ppc64le" ]]; then
     CMAKE_BUILD_TYPE=None
 fi
 
-# Build static.
-cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-      -DCMAKE_INSTALL_LIBDIR="lib" \
-      -DCMAKE_PREFIX_PATH=${PREFIX} \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DENABLE_DAP=ON \
-      -DENABLE_HDF4=ON \
-      -DENABLE_NETCDF_4=ON \
-      -DBUILD_SHARED_LIBS=OFF \
-      -DENABLE_TESTS=ON \
-      -DBUILD_UTILITIES=ON \
-      -DENABLE_DOXYGEN=OFF \
-      -DENABLE_CDF5=ON \
-      -DENABLE_BYTERANGE=ON \
-      ${PARALLEL} \
-      -DENABLE_NCZARR=on \
-      -DENABLE_NCZARR_S3=off \
-      -DENABLE_NCZARR_S3_TESTS=off \
-      ${SRC_DIR}
-# ctest  # Run only for the shared lib build to save time.
-make install -j${CPU_COUNT} ${VERBOSE_CM}
-make clean
-
-# Build shared.
 cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_INSTALL_LIBDIR="lib" \
       -DCMAKE_PREFIX_PATH=${PREFIX} \
@@ -100,9 +76,9 @@ make install -j${CPU_COUNT} ${VERBOSE_CM}
 
 SKIP=""
 
-if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]]; then
-ctest -VV --output-on-failure -j${CPU_COUNT} ${SKIP}
-fi
+# if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]]; then
+# ctest -VV --output-on-failure -j${CPU_COUNT} ${SKIP}
+# fi
 
 # Fix build paths in cmake artifacts
 for fname in `ls ${PREFIX}/lib/cmake/netCDF/*`; do
