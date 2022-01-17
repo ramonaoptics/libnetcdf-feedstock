@@ -9,3 +9,8 @@ pin_run_as_build:
 pin_run_as_build:
   mpich: x.x
 
+channel_sources:
+  - ramonaoptics,conda-forge
+channel_targets:
+  - ramonaoptics main
+
